@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meet The Team — BUDAK LAB</title>
+<meta name="description" content="One lab, nine builders. Meet the people behind BUDAK LAB." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="loader" id="loader">
+  <div class="loader__mark">
+    <svg viewBox="0 0 120 40" class="loader__logo">
+      <text x="0" y="30" class="loader__logotext">BUDAK LAB</text>
+    </svg>
+  </div>
+  <div class="loader__bar-track">
+    <div class="loader__bar-fill" id="loaderFill"></div>
+  </div>
+  <div class="loader__pct" id="loaderPct">00</div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav__logo">BUDAK<span> LAB</span></a>
+  <div class="nav__links">
+    <a href="index.html" class="nav__link">Home</a>
+    <a href="page2.html" class="nav__link">Journey</a>
+    <a href="page3.html" class="nav__link nav__link--active">Team</a>
+    <a href="#" class="nav__link nav__link--cta">Contact</a>
+  </div>
+</nav>
+
+<main id="app">
+
+  <section class="page page--team" id="team">
+    <div class="team__bg" id="teamBg" aria-hidden="true"></div>
+
+    <div class="team__ticker" aria-hidden="true">
+      <div class="team__ticker-track" id="tickerTrack"><!-- populated by page3.js --></div>
+    </div>
+
+    <div class="team__hero" id="teamHero">
+      <div class="team__intro" id="teamIntro">
+        <span class="eyebrow-mono" data-reveal>// Meet The Team</span>
+        <h2 class="team__title" data-reveal>One lab. <span class="count" id="teamCount">_</span> builders.</h2>
+        <div class="team__stats-row" data-reveal>
+          <span><strong id="statBuilders" data-count="0">0</strong>Builders</span>
+          <span class="team__stats-dot" aria-hidden="true">•</span>
+          <span><strong id="statShipped" data-count="0">0</strong>Shipped</span>
+        </div>
+      </div>
+
+      <div class="team__leader-stage">
+        <div class="team__leader-slot" id="leaderSlot"></div>
+      </div>
+
+      <div class="team__controls">
+        <button class="btn btn--outline magnetic" id="meetOthersBtn">
+          <span>Meet The Others</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="team__hint" id="teamHint">Click on the figure to bring in the rest of the members.</p>
+      </div>
+
+      <div class="team__scroll-cue" id="scrollCue">
+        <span>Scroll</span>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <div class="team__grid-section" id="gridSection">
+      <div class="team__filters" id="teamFilters" hidden></div>
+      <div class="team__members-grid" id="membersGrid"></div>
+    </div>
+
+    <div class="team__preview" id="teamPreview"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 BUDAK LAB</span>
+  <span>Built by the lab, for the lab.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="members.js"></script>
+<script src="figures.js"></script>
+<script src="common.js"></script>
+<script src="page3.js"></script>
+</body>
+</html>

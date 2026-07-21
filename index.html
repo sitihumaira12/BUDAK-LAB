@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BUDAK LAB — Building Innovation Through Technology</title>
+<meta name="description" content="BUDAK LAB is a university innovation team building in dashboards, GIS, AI, web development, data analytics and research." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ NOISE / GRAIN OVERLAY ============ -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ LOADING SCREEN ============ -->
+<div class="loader" id="loader">
+  <div class="loader__mark">
+    <svg viewBox="0 0 120 40" class="loader__logo">
+      <text x="0" y="30" class="loader__logotext">BUDAK LAB</text>
+    </svg>
+  </div>
+  <div class="loader__bar-track">
+    <div class="loader__bar-fill" id="loaderFill"></div>
+  </div>
+  <div class="loader__pct" id="loaderPct">00</div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav__logo">BUDAK<span> LAB</span></a>
+  <div class="nav__links">
+    <a href="index.html" class="nav__link nav__link--active">Home</a>
+    <a href="page2.html" class="nav__link">Journey</a>
+    <a href="page3.html" class="nav__link">Team</a>
+    <a href="#" class="nav__link nav__link--cta">Contact</a>
+  </div>
+  <div class="nav__status" id="navStatus">
+    <span class="dot-pulse"></span>
+    <span id="navClock">--:--</span>
+  </div>
+</nav>
+
+<main id="app">
+
+  <!-- ============ HERO — SPLIT: COPY LEFT / TEAM PHOTO RIGHT ============ -->
+  <section class="page page--hero" id="landing">
+    <div class="hero__bg-gradient" aria-hidden="true"></div>
+    <div class="hero__spotlight" id="heroSpotlight" aria-hidden="true"></div>
+
+    <div class="hero__grid">
+
+      <div class="hero__copy">
+        <div class="eyebrow-chip hero__eyebrow" data-reveal>
+          <span class="dot-pulse"></span>
+          <span>A Small Team Building Big Ideas</span>
+        </div>
+
+        <h1 class="hero__title" data-title>
+          <span class="line"><span class="word" data-final="BUDAK">BUDAK</span></span>
+          <span class="line"><span class="word" data-final="LAB">LAB</span></span>
+        </h1>
+        <p class="hero__subtitle" data-reveal>Building Innovation Through Technology</p>
+        <p class="hero__desc" data-reveal>
+          BUDAK LAB is an nine-person team building across dashboards, GIS, artificial intelligence, 
+          web platforms and applied research — turning ideas into practical tools that solve real problems.
+        </p>
+
+        <div class="hero__cycler" data-reveal>
+          <span class="hero__cycler-label">Building across</span>
+          <span class="hero__cycler-word" id="cyclerWord">Dashboards</span>
+        </div>
+
+        <a href="page2.html" class="btn btn--primary hero__cta magnetic" data-reveal>
+          <span>Explore Our Journey</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="hero__visual" data-reveal>
+        <div class="hero__blob hero__blob--1" aria-hidden="true"></div>
+        <div class="hero__blob hero__blob--2" aria-hidden="true"></div>
+        <div class="hero__photo-wrap">
+          <div class="hero__photo-frame">
+            <img class="hero__photo" src="assets/images/img.png" alt="The nine members of BUDAK LAB standing together" />
+            <div class="hero__scanline" id="heroScanline" aria-hidden="true"></div>
+          </div>
+          <div class="hero__chip">Nine minds. One mission.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 BUDAK LAB</span>
+  <span>Built by the lab, for the lab.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="common.js"></script>
+<script src="page1.js"></script>
+</body>
+</html>

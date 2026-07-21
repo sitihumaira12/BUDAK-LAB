@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Reel — BUDAK LAB</title>
+<meta name="description" content="A short montage of what BUDAK LAB builds — dashboards, GIS, AI, web platforms, data analytics and research." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-dark">
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="loader" id="loader">
+  <div class="loader__mark">
+    <svg viewBox="0 0 120 40" class="loader__logo">
+      <text x="0" y="30" class="loader__logotext">BUDAK LAB</text>
+    </svg>
+  </div>
+  <div class="loader__bar-track">
+    <div class="loader__bar-fill" id="loaderFill"></div>
+  </div>
+  <div class="loader__pct" id="loaderPct">00</div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav__logo">BUDAK<span> LAB</span></a>
+  <div class="nav__links">
+    <a href="index.html" class="nav__link">Home</a>
+    <a href="page2.html" class="nav__link nav__link--active">Journey</a>
+    <a href="page3.html" class="nav__link">Team</a>
+    <a href="#" class="nav__link nav__link--cta">Contact</a>
+  </div>
+</nav>
+
+<main id="app">
+
+  <section class="page page--reel" id="journey">
+
+    <div class="reel-intro">
+      <span class="eyebrow-mono" data-reveal>// The Reel</span>
+      <h2 class="reel-intro__title" data-reveal>What a lab table<br/>turns into, in motion.</h2>
+      <p class="reel-intro__desc" data-reveal>
+        Seven fields, one lab. Watch it play through once, or jump to what you're curious about.
+      </p>
+    </div>
+
+    <div class="reel" id="reel" data-reveal>
+      <a href="page3.html" class="reel__skip">
+        Skip
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <div class="reel__ticks" id="reelTicks"></div>
+
+      <div class="reel__frame" id="reelFrame">
+        <!-- slides injected by page2.js -->
+
+        <div class="reel__endcard" id="reelEndcard">
+          <div class="reel__endcard-inner">
+            <span class="eyebrow-mono">// That's the reel</span>
+            <h3>Ready to meet the people who built it?</h3>
+            <a href="page3.html" class="btn magnetic">
+              <span>Meet The Team</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="reel__controls">
+        <button class="reel__control-btn" id="reelPrev" aria-label="Previous">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="reel__control-btn" id="reelPlay" aria-label="Pause">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" id="reelPlayIcon"><rect x="2" y="1.5" width="3.4" height="11" rx="1" fill="currentColor"/><rect x="8.6" y="1.5" width="3.4" height="11" rx="1" fill="currentColor"/></svg>
+        </button>
+        <button class="reel__control-btn" id="reelNext" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <div class="reel__thumbs" id="reelThumbs"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 BUDAK LAB</span>
+  <span>Built by the lab, for the lab.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="members.js"></script>
+<script src="common.js"></script>
+<script src="page2.js"></script>
+</body>
+</html>
