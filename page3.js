@@ -8,17 +8,21 @@
 // ============================================================
 
 function formatJoined(m) {
-  return m.left ? `Joined ${m.joined} · Left ${m.left}` : `Joined ${m.joined}`;
+  return m.left ? `${m.joined} – ${m.left}` : `Joined ${m.joined}`;
 }
 function statusLabel(m) {
-  return m.status === "current" ? "Current Member" : "Alumni";
+  return m.status === "current" ? "Current Member" : "Former Member";
 }
 
-function statChipHTML(member) {
-  const currentYear = new Date().getFullYear();
-  const years = Math.max(1, (member.left || currentYear) - member.joined);
-  const projectCount = (member.projects || []).length;
-  return `<span class="figure__stat">${projectCount} shipped · ${years}${years === 1 ? "yr" : "yrs"}</span>`;
+// Renders a real photo if the member has one (member.photo = path to an
+// image file), otherwise falls back to the illustrated figure from
+// figures.js. This means adding a photo never requires touching figures.js —
+// just add a `photo` field to that member's entry in members.js.
+function buildVisual(member) {
+  if (member.photo) {
+    return `<div class="figure__photo-frame"><img class="figure__photo-img" src="${member.photo}" alt="${member.name}" loading="lazy" /></div>`;
+  }
+  return buildFigureSVG(member, member.id);
 }
 
 function createFigureEl(member, { withLabel = true } = {}) {
@@ -28,24 +32,40 @@ function createFigureEl(member, { withLabel = true } = {}) {
   el.setAttribute("data-theme", member.theme);
   el.setAttribute("data-status", member.status);
 
-  el.innerHTML = `
-    <div class="figure__visual-wrap">
-      ${buildFigureSVG(member, member.id)}
-      ${buildDomainBadge(member.domain)}
-    </div>
-    ${withLabel ? `
-    <div class="figure__label">
+  const label = member.isLeader
+    ? `
+      <span class="figure__label-name">${member.name}</span>
+      ${member.tagline ? `<p class="figure__tagline">${member.tagline}</p>` : ""}
+    `
+    : `
       <span class="figure__label-name">${member.name}</span>
       <span class="figure__label-meta">${formatJoined(member)}</span>
       <span class="figure__label-status">${statusLabel(member)}</span>
-      ${statChipHTML(member)}
-    </div>` : ""}
+    `;
+
+  el.innerHTML = `
+    <div class="figure__visual-wrap">
+      ${buildVisual(member)}
+    </div>
+    ${withLabel ? `<div class="figure__label">${label}</div>` : ""}
   `;
   return el;
 }
 
 let teamRevealed = false;
+const params = new URLSearchParams(window.location.search);
 
+if (params.get("view") === "members") {
+
+    // automatically trigger member view
+
+    const leaderButton = document.querySelector(".leader-card");
+
+    if (leaderButton) {
+        leaderButton.click();
+    }
+
+}
 function buildTeamLeader() {
   const slot = document.getElementById("leaderSlot");
   const leader = MEMBERS.find((m) => m.isLeader);
@@ -55,11 +75,10 @@ function buildTeamLeader() {
 
   document.getElementById("teamBg").parentElement.setAttribute("data-theme", leader.theme);
   wireFigureClick(el, leader, { alsoReveal: true });
-  initHoverPreview(el, leader);
   initLeaderTilt(slot);
 
   gsap.from(el, {
-    opacity: 0, y: 40, scale: 0.6, duration: 0.9, ease: "back.out(1.5)", delay: 0.2,
+    opacity: 0, y: 14, scale: 0.94, duration: 0.5, ease: "power2.out",
     onComplete: () => burstParticles(slot, { count: 10, colors: [themeColor(leader.theme)] }),
   });
 }
@@ -83,6 +102,9 @@ function initLeaderTilt(slot) {
   slot.addEventListener("mouseleave", () => { qx(0); qy(0); });
 }
 
+// Reveals the rest of the lab in a clean grid below the leader — laid
+// out by CSS grid (3 per row, 2 on mobile), so nothing can overlap
+// regardless of how many members there are.
 function revealRestOfTeam() {
   if (teamRevealed) return;
   teamRevealed = true;
@@ -97,7 +119,6 @@ function revealRestOfTeam() {
     const el = createFigureEl(m);
     grid.appendChild(el);
     wireFigureClick(el, m);
-    initHoverPreview(el, m);
     gsap.set(el, { opacity: 0, y: 26, scale: 0.4, transformOrigin: "bottom center" });
 
     gsap.to(el, {
@@ -126,33 +147,85 @@ function debounce(fn, wait) {
 
 // ---- filter bar: All / Current / Alumni, with live counts ----
 function initTeamFilters(others) {
+
   const bar = document.getElementById("teamFilters");
   if (!bar) return;
 
-  const currentCount = others.filter((m) => m.status === "current").length;
-  const alumniCount = others.filter((m) => m.status === "alumni").length;
+  const currentCount = others.filter(
+    (m) => m.status === "current"
+  ).length;
+
+  const formerCount = others.filter(
+    (m) => m.status === "former"
+  ).length;
+
 
   bar.innerHTML = `
-    <button class="filter-chip is-active" data-filter="all">All <span>${others.length}</span></button>
-    <button class="filter-chip" data-filter="current">Current <span>${currentCount}</span></button>
-    <button class="filter-chip" data-filter="alumni">Alumni <span>${alumniCount}</span></button>
+    <button class="filter-chip is-active" data-filter="all">
+        All <span>${others.length}</span>
+    </button>
+
+    <button class="filter-chip" data-filter="current">
+        Current <span>${currentCount}</span>
+    </button>
+
+    <button class="filter-chip" data-filter="former">
+        Former <span>${formerCount}</span>
+    </button>
   `;
+
+
   bar.hidden = false;
-  gsap.from(bar.children, { opacity: 0, y: 10, duration: 0.5, stagger: 0.06, delay: 0.3 });
+
 
   bar.addEventListener("click", (e) => {
+
     const chip = e.target.closest(".filter-chip");
+
     if (!chip) return;
-    bar.querySelectorAll(".filter-chip").forEach((c) => c.classList.toggle("is-active", c === chip));
+
+
+    bar.querySelectorAll(".filter-chip")
+      .forEach((c) => 
+        c.classList.toggle(
+          "is-active",
+          c === chip
+        )
+      );
+
+
     applyTeamFilter(chip.dataset.filter);
+
   });
 }
 
 function applyTeamFilter(filter) {
-  document.querySelectorAll("#membersGrid .figure").forEach((el) => {
-    const match = filter === "all" || el.dataset.status === filter;
-    el.classList.toggle("is-filtered-out", !match);
-  });
+
+    const cards = document.querySelectorAll(".team-member-card");
+
+
+    cards.forEach(card => {
+
+        const status = card.dataset.status;
+
+
+        if (filter === "all") {
+
+            card.style.display = "";
+
+        } 
+        else if (status === filter) {
+
+            card.style.display = "";
+
+        } 
+        else {
+
+            card.style.display = "none";
+
+        }
+
+    });
 }
 
 // ---- particle "assemble" burst: a quick, playful pop of themed dots,
@@ -488,4 +561,31 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeProjectModal();
   });
+});
+// Auto reveal members when returning from profile page
+window.addEventListener("load", () => {
+
+    if (window.location.hash === "#gridSection") {
+
+        setTimeout(() => {
+
+            const leader = document.querySelector(".figure--leader");
+
+            if (leader) {
+                leader.click();
+            }
+
+            setTimeout(() => {
+                document
+                    .getElementById("gridSection")
+                    ?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+            }, 500);
+
+        }, 800);
+
+    }
+
 });

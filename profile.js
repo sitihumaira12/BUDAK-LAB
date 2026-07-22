@@ -10,9 +10,18 @@ function formatJoined(m) {
   return m.left ? `Joined ${m.joined} · Left ${m.left}` : `Joined ${m.joined}`;
 }
 function statusLabel(m) {
-  return m.status === "current" ? "Current Member" : "Alumni";
+  return m.status === "current" ? "Current Member" : "Former";
 }
-
+function buildVisual(member) {
+  if (member.photo) {
+    return `<img
+      class="figure__photo-img"
+      src="${member.photo}"
+      alt="${member.name}"
+      loading="lazy">`;
+  }
+  return buildFigureSVG(member, member.id);
+}
 function buildRadarSVG(contribution) {
   const axes = [
     ["Leadership", contribution.leadership],
@@ -88,7 +97,7 @@ function renderProfile(member) {
   document.title = `${member.name} — BUDAK LAB`;
   document.getElementById("profileBg").parentElement.setAttribute("data-theme", member.theme);
 
-  const photo = buildFigureSVG(member, "profile-" + member.id);
+  const photo = buildVisual(member);
 
   const projectsHTML = member.projects && member.projects.length
     ? `<div class="profile-projects-grid">${member.projects.map(projectCardHTML).join("")}</div>`
@@ -105,29 +114,27 @@ function renderProfile(member) {
         </div>
         <h2 class="profile__name">${member.name}</h2>
         <p class="profile__role">${member.role}</p>
-        <p class="profile__bio">${member.bio}</p>
       </div>
     </div>
 
     <div class="profile__body">
       <div>
-        <p class="profile__block-label">Skills</p>
+        <p class="profile__block-label">Key Contributions</p>
         <div id="profileSkills">
-          ${member.skills.map((s) => `
-            <div class="skill-row">
-              <div class="skill-top"><span>${s.name}</span><span>${s.level}%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" data-target="${s.level}"></div></div>
-            </div>`).join("")}
+          <div class="contribution-grid">
+              ${member.key_contributions.map(item => `
+                  <div class="contribution-card">
+                      <span class="contribution-icon">✓</span>
+                      <span>${item}</span>
+                  </div>
+              `).join("")}
+          </div>
+          </div>
         </div>
       </div>
-      <div>
-        <p class="profile__block-label">Contribution</p>
-        <div class="radar__wrap">${buildRadarSVG(member.contribution)}</div>
-      </div>
-    </div>
 
     <div class="profile__projects">
-      <p class="profile__block-label">Projects Shipped</p>
+      <p class="profile__block-label">Projects</p>
       ${projectsHTML}
     </div>
   `;
@@ -162,13 +169,47 @@ function openProjectModal(projectId) {
       <h3 class="modal__title">${p.title}</h3>
     </div>
     <div class="modal__body">
-      <div class="modal__section"><h4>Overview</h4><p>${p.overview}</p></div>
-      <div class="modal__section"><h4>Problem</h4><p>${p.problem}</p></div>
-      <div class="modal__section"><h4>Solution</h4><p>${p.solution}</p></div>
-      <div class="modal__section">
+
+    <div class="modal__section">
+        <h4>Overview</h4>
+        <p>${p.overview}</p>
+    </div>
+
+    <div class="modal__section">
+        <h4>Objectives</h4>
+        <p>${p.objectives}</p>
+    </div>
+
+    <div class="modal__section">
+        <h4>Descriptions</h4>
+        <p>${p.description}</p>
+    </div>
+
+    <div class="modal__section">
         <h4>Stack</h4>
-        <div class="modal__stack">${p.stack.map((s) => `<span class="stack-chip">${s}</span>`).join("")}</div>
-      </div>
+        <div class="modal__stack">
+            ${p.stack.map(item => `
+                <span class="stack-chip">
+                    ${item}
+                </span>
+            `).join("")}
+        </div>
+    </div>
+        ${p.video ? `
+    <div class="modal__section">
+        <h4>Video</h4>
+
+        <div class="project-video">
+            <video controls>
+                <source src="${p.video}" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+
+    </div>
+    ` : ""}
+
+</div>
     </div>
   `;
   const overlay = document.getElementById("projectModal");
