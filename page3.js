@@ -27,7 +27,7 @@ function buildVisual(member) {
 
 function createFigureEl(member, { withLabel = true } = {}) {
   const el = document.createElement("div");
-  el.className = "figure";
+  el.className = "figure team-member-card";
   el.dataset.member = member.id;
   el.setAttribute("data-theme", member.theme);
   el.setAttribute("data-status", member.status);
